@@ -38,6 +38,14 @@ const Donation = sequelize.define("Donation", {
 		type: DataTypes.FLOAT,
 		allowNull: false,
 	},
+	ngoId: {
+		type: DataTypes.INTEGER,
+		references: {
+			model: "Ngos", // name of the table
+			key: "id",
+		},
+		allowNull: false,
+	},
 });
 
 module.exports = Donation;
