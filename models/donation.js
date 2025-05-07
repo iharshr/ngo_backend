@@ -1,5 +1,6 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/db");
+const { DataTypes, Sequelize } = require("sequelize");
+const sequelize = require("../config/db"); // Assuming sequelize instance is initialized here
+const Ngo = require("./ngos"); // Import the Ngo model correctly
 
 const Donation = sequelize.define("Donation", {
 	name: {
@@ -39,13 +40,19 @@ const Donation = sequelize.define("Donation", {
 		allowNull: false,
 	},
 	ngoId: {
-		type: DataTypes.INTEGER,
-		references: {
-			model: "Ngos", // name of the table
-			key: "id",
-		},
+		type: Sequelize.INTEGER,
 		allowNull: false,
+		references: {
+			model: "Ngos", // Reference to the 'Ngos' table
+			key: "id", // Reference the 'id' field in the 'Ngos' table
+		},
 	},
 });
 
-module.exports = Donation;
+// Define the association correctly
+Donation.belongsTo(Ngo, {
+	foreignKey: "ngoId", // The field in the Donation model
+	as: "ngo", // Alias for the association
+});
+
+module.exports = Donation; // Make sure you're exporting the model

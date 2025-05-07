@@ -1,5 +1,6 @@
 const express = require("express");
 const Ngo = require("../models/ngos");
+const sequelize = require("../config/db");
 const router = express.Router();
 
 // Create a new NGO
@@ -16,7 +17,20 @@ router.post("/ngo", async (req, res) => {
 // Get all NGOs
 router.get("/ngos", async (req, res) => {
 	try {
-		const ngos = await Ngo.findAll();
+		const ngos = await Ngo.findAll({
+			attributes: {
+				include: [
+					[
+						sequelize.literal(`(
+							SELECT COUNT(*)
+							FROM "Donations" AS d
+							WHERE d."ngoId" = "Ngo"."id"
+						)`),
+						"donationCount",
+					],
+				],
+			},
+		});
 		res.status(200).json(ngos);
 	} catch (error) {
 		console.error(error);

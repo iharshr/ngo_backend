@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../config/db");
+const sequelize = require("../config/db"); // Assuming sequelize instance is initialized here
 
 const Ngo = sequelize.define("Ngo", {
 	ngo_name: {
@@ -48,4 +48,4 @@ const Ngo = sequelize.define("Ngo", {
 	},
 });
 
-module.exports = Ngo;
+module.exports = Ngo; // Make sure you're exporting the model
