@@ -40,7 +40,21 @@ router.get("/ngos", async (req, res) => {
 
 router.get("/ngos-confirmed", async (req, res) => {
 	try {
-		const ngos = await Ngo.findAll({ where: { status: "confirmed" } });
+		const ngos = await Ngo.findAll({
+			attributes: {
+				include: [
+					[
+						sequelize.literal(`(
+							SELECT COUNT(*)
+							FROM "Donations" AS d
+							WHERE d."ngoId" = "Ngo"."id"
+						)`),
+						"donationCount",
+					],
+				],
+			},
+			where: { status: "confirmed" },
+		});
 		res.status(200).json(ngos);
 	} catch (error) {
 		console.error("Error fetching confirmed NGOs:", error);
